@@ -80,9 +80,10 @@ class Input
 {
 public:
 	Input(App* window);
+	~Input();
 
 	bool GetKeyDown(Keys key);
 	bool GetKeyUp(Keys key);
 private:
-	App* mData = nullptr;
+	App* m_data = nullptr;
 };

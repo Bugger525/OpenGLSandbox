@@ -4,6 +4,7 @@
 class MyApp : public App
 {
 protected:
+	Input* m_input = new Input(this);
 	bool Initialize() override
 	{
 		return true;
@@ -14,10 +15,14 @@ protected:
 	}
 	void Update() override
 	{
-
+		if (m_input->GetKeyDown(Keys::Escape))
+		{
+			Close();
+		}
 	}
 	void Cleanup() override
 	{
+		//delete m_input;
 	}
 };
 

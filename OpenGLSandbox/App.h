@@ -36,9 +36,9 @@ private:
 	DebugSource InitializeCore();
 	void CleanupCore();
 
-	std::pair<int, int> mSize = { 800, 600 };
-	std::string mTitle = "App";
+	std::pair<int, int> m_size = { 800, 600 };
+	std::string m_title = "App";
 
-	std::pair<int, int> mGLVersion = { 3, 3 };
-	GLFWwindow* mData = nullptr;
+	std::pair<int, int> m_glVersion = { 3, 3 };
+	GLFWwindow* m_data = nullptr;
 };

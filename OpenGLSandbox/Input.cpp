@@ -6,13 +6,17 @@
 
 Input::Input(App* window)
 {
-	mData = window;
+	m_data = window;
+}
+Input::~Input()
+{
+	delete m_data;
 }
 bool Input::GetKeyDown(Keys key)
 {
-	return (glfwGetKey(mData->GetData(), static_cast<int>(key)) == GLFW_PRESS);
+	return (glfwGetKey(m_data->GetData(), static_cast<int>(key)) == GLFW_PRESS);
 }
 bool Input::GetKeyUp(Keys key)
 {
-	return (glfwGetKey(mData->GetData(), static_cast<int>(key)) == GLFW_RELEASE);
+	return (glfwGetKey(m_data->GetData(), static_cast<int>(key)) == GLFW_RELEASE);
 }
