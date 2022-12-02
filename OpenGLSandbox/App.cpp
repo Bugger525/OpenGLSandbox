@@ -1,9 +1,9 @@
 #include "App.h"
+#include "Shader.h"
 
 #include <GL/gl3w.h>
 #include <GLFW/glfw3.h>
 #include <format>
-
 #include <iostream>
 
 #ifdef __cplusplus
@@ -58,14 +58,12 @@ void APIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id, GLenum 
 	} std::cout << std::endl;
 }
 
-
 App::App() { }
 void App::Run()
 {
-	auto result = InitializeCore();
-	if (result != DebugSource::Other)
+	if (!InitializeCore())
 	{
-		Debug::Log("Failed to initialize core.", result, DebugType::Error, DebugSeverity::High);
+		Debug::Log("Failed to initialize core.", DebugSource::Application, DebugType::Error, DebugSeverity::High);
 		return;
 	}
 	if (!Initialize())
@@ -73,42 +71,8 @@ void App::Run()
 		Debug::Log("Failed to initialize.", DebugSource::Application, DebugType::Error, DebugSeverity::Medium);
 		return;
 	}
-	auto vertexShaderCode = R"(
-#version 330 core
-layout(location = 0) in vec3 aPos;
 
-void main()
-{
-	gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
-})";
-	auto fragmentShaderCode = R"(
-#version 330 core
-out vec4 FragColor;
-
-void main()
-{
-    FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
-} 
-)";
-	GLuint vertexShader = NULL;
-	vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShader, 1, &vertexShaderCode, nullptr);
-	glCompileShader(vertexShader);
-
-	GLuint fragmentShader = NULL;
-	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragmentShaderCode, nullptr);
-	glCompileShader(fragmentShader);
-
-	GLuint shaderProgram = NULL;
-	shaderProgram = glCreateProgram();
-
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
-
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
+	Shader shader("Shaders/shader.vert", "Shaders/shader.frag");
 
 	float vertices[] = {
 	-0.5f, -0.5f, 0.0f,
@@ -130,15 +94,17 @@ void main()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
-	while (!glfwWindowShouldClose(m_data))
+	while (!glfwWindowShouldClose(m_Data))
 	{
 		glfwPollEvents();
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-		glUseProgram(shaderProgram);
+
+		shader.Use();
 		glBindVertexArray(arrayObject);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
-		glfwSwapBuffers(m_data);
+
+		glfwSwapBuffers(m_Data);
 		Update();
 		Render();
 	}
@@ -147,73 +113,75 @@ void main()
 }
 const std::pair<int, int>& App::GetWindowSize() const
 {
-	return m_size;
+	return m_Size;
 }
 std::string App::GetWindowTitle() const
 {
-	return m_title;
+	return m_Title;
 }
 std::string App::GetGLVersionString() const
 {
-	auto result = std::format("#version {}{}0", m_glVersion.first, m_glVersion.second);
+	auto result = std::format("#version {}{}0", m_GLVersion.first, m_GLVersion.second);
 	return result;
 }
 const std::pair<int, int>& App::GetGLVersionPair() const
 {
-	return m_glVersion;
+	return m_GLVersion;
 }
 GLFWwindow* App::GetData() const
 {
-	return m_data;
+	return m_Data;
 }
 void App::SetWindowSize(int width, int height)
 {
-	m_size = { width, height };
-	glfwSetWindowSize(m_data, m_size.first, m_size.second);
+	m_Size = { width, height };
+	glfwSetWindowSize(m_Data, m_Size.first, m_Size.second);
 }
 void App::SetWindowWidth(int width)
 {
-	m_size.first = width;
-	glfwSetWindowSize(m_data, m_size.first, m_size.second);
+	m_Size.first = width;
+	glfwSetWindowSize(m_Data, m_Size.first, m_Size.second);
 }
 void App::SetWindowHeight(int height)
 {
-	m_size.second = height;
-	glfwSetWindowSize(m_data, m_size.first, m_size.second);
+	m_Size.second = height;
+	glfwSetWindowSize(m_Data, m_Size.first, m_Size.second);
 }
-void App::SetWindowTitle(const std::string_view& title)
+void App::SetWindowTitle(std::string_view title)
 {
-	m_title = title;
+	m_Title = title;
 
-	glfwSetWindowTitle(m_data, m_title.c_str());
+	glfwSetWindowTitle(m_Data, m_Title.c_str());
 }
 void App::Close()
 {
-	glfwSetWindowShouldClose(m_data, true);
+	glfwSetWindowShouldClose(m_Data, true);
 }
-DebugSource App::InitializeCore()
+bool App::InitializeCore()
 {
 	if (!glfwInit())
 	{
-		return DebugSource::ThirdParty;
+		return false;
 	}
 
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, m_glVersion.first);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, m_glVersion.second);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, m_GLVersion.first);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, m_GLVersion.second);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 
-	m_data = glfwCreateWindow(m_size.first, m_size.second, m_title.c_str(), nullptr, nullptr);
-	if (m_data == nullptr)
+	m_Data = glfwCreateWindow(m_Size.first, m_Size.second, m_Title.c_str(), nullptr, nullptr);
+	if (m_Data == nullptr)
 	{
-		return DebugSource::WindowSystem;
+		return false;
 	}
-	glfwMakeContextCurrent(m_data);
+	glfwMakeContextCurrent(m_Data);
 
 	if (gl3wInit() != GL3W_OK)
 	{
-		return DebugSource::API;
+		return false;
 	}
+
+	Input = new ::Input(this);
 
 	int flags;
 	glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
@@ -225,12 +193,12 @@ DebugSource App::InitializeCore()
 		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
 	}
 
-	glfwSetFramebufferSizeCallback(m_data, glFrameBufferSizeCallback);
+	glfwSetFramebufferSizeCallback(m_Data, glFrameBufferSizeCallback);
 
-	return DebugSource::Other;
+	return true;
 }
 void App::CleanupCore()
 {
-	glfwDestroyWindow(m_data);
+	glfwDestroyWindow(m_Data);
 	glfwTerminate();
 }

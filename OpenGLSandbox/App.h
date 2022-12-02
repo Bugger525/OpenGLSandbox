@@ -3,6 +3,7 @@
 #include <string>
 #include <utility>
 #include "Debug.h"
+#include "Input.h"
 
 struct GLFWwindow;
 
@@ -24,7 +25,9 @@ protected:
 	void SetWindowSize(int width, int height);
 	void SetWindowWidth(int width);
 	void SetWindowHeight(int height);
-	void SetWindowTitle(const std::string_view& title);
+	void SetWindowTitle(std::string_view title);
+
+	Input* Input = nullptr;
 
 	void Close();
 
@@ -33,12 +36,12 @@ protected:
 	virtual void Update() = 0;
 	virtual void Cleanup() = 0;
 private:
-	DebugSource InitializeCore();
+	bool InitializeCore();
 	void CleanupCore();
 
-	std::pair<int, int> m_size = { 800, 600 };
-	std::string m_title = "App";
+	std::pair<int, int> m_Size = { 800, 600 };
+	std::string m_Title = "App";
 
-	std::pair<int, int> m_glVersion = { 3, 3 };
-	GLFWwindow* m_data = nullptr;
+	std::pair<int, int> m_GLVersion = { 4, 5 };
+	GLFWwindow* m_Data = nullptr;
 };

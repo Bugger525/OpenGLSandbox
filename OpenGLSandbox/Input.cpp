@@ -1,4 +1,3 @@
-
 #include "Input.h"
 #include "App.h"
 
@@ -6,17 +5,17 @@
 
 Input::Input(App* window)
 {
-	m_data = window;
+	m_Data = window;
 }
 Input::~Input()
 {
-	delete m_data;
+	delete m_Data;
 }
-bool Input::GetKeyDown(Keys key)
+bool Input::IsKeyDown(Keys key)
 {
-	return (glfwGetKey(m_data->GetData(), static_cast<int>(key)) == GLFW_PRESS);
+	return (glfwGetKey(m_Data->GetData(), static_cast<int>(key)) == GLFW_PRESS);
 }
-bool Input::GetKeyUp(Keys key)
+bool Input::IsKeyUp(Keys key)
 {
-	return (glfwGetKey(m_data->GetData(), static_cast<int>(key)) == GLFW_RELEASE);
+	return (glfwGetKey(m_Data->GetData(), static_cast<int>(key)) == GLFW_RELEASE);
 }

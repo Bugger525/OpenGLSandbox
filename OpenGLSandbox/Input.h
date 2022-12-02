@@ -82,8 +82,8 @@ public:
 	Input(App* window);
 	~Input();
 
-	bool GetKeyDown(Keys key);
-	bool GetKeyUp(Keys key);
+	bool IsKeyDown(Keys key);
+	bool IsKeyUp(Keys key);
 private:
-	App* m_data = nullptr;
+	App* m_Data = nullptr;
 };
