@@ -1,6 +1,6 @@
 #pragma once
 
-class App;
+struct GLFWwindow;
 
 enum class Keys : int
 {
@@ -79,11 +79,10 @@ enum class Keys : int
 class Input
 {
 public:
-	Input(App* window);
-	~Input();
+	Input(GLFWwindow* window);
 
 	bool IsKeyDown(Keys key);
 	bool IsKeyUp(Keys key);
 private:
-	App* m_Data = nullptr;
+	GLFWwindow* m_Data = nullptr;
 };

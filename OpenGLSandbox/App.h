@@ -2,7 +2,6 @@
 
 #include <string>
 #include <utility>
-#include "Debug.h"
 #include "Input.h"
 
 struct GLFWwindow;

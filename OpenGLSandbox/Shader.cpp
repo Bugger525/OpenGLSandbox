@@ -36,7 +36,7 @@ Shader::Shader(std::string_view vertexShaderPath, std::string_view fragmentShade
 	}
 	catch (std::ifstream::failure e)
 	{
-		Debug::Log("Failed to read shader codes.", DebugSource::Application, DebugType::Error, DebugSeverity::Medium);
+		Debug::Error("Failed to read shader codes.");
 		return;
 	}
 
@@ -55,12 +55,7 @@ Shader::Shader(std::string_view vertexShaderPath, std::string_view fragmentShade
 	if (!success)
 	{
 		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-		Debug::Log(
-			std::format("Failed to compile vertex shader : {}", infoLog),
-			DebugSource::Application,
-			DebugType::Error,
-			DebugSeverity::High
-		);
+		Debug::Critical(std::format("Failed to compile vertex shader : {}", infoLog));
 		return;
 	}
 
@@ -73,12 +68,7 @@ Shader::Shader(std::string_view vertexShaderPath, std::string_view fragmentShade
 	if (!success)
 	{
 		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-		Debug::Log(
-			std::format("Failed to compile fragment shader : {}", infoLog),
-			DebugSource::Application,
-			DebugType::Error,
-			DebugSeverity::High
-		);
+		Debug::Critical(std::format("Failed to compile fragment shader : {}", infoLog));
 		return;
 	}
 
@@ -89,15 +79,10 @@ Shader::Shader(std::string_view vertexShaderPath, std::string_view fragmentShade
 	glLinkProgram(m_ShaderProgram);
 
 	glGetProgramiv(m_ShaderProgram, GL_LINK_STATUS, &success);
-	success = 0;
 	if (!success)
 	{
-		glGetShaderInfoLog(m_ShaderProgram, 512, NULL, infoLog);
-		Debug::Log(std::format("Failed to link program : {}", infoLog),
-			DebugSource::Application,
-			DebugType::Error,
-			DebugSeverity::High
-		);
+		glGetProgramInfoLog(m_ShaderProgram, 512, NULL, infoLog);
+		Debug::Critical(std::format("Failed to link program : {}", infoLog));
 		return;
 	}
 
