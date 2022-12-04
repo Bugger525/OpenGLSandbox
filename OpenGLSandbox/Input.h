@@ -79,10 +79,10 @@ enum class Keys : int
 class Input
 {
 public:
-	Input(GLFWwindow* window);
+	Input() = delete;
 
-	bool IsKeyDown(Keys key);
-	bool IsKeyUp(Keys key);
-private:
-	GLFWwindow* m_Data = nullptr;
+	static void SetWindow(GLFWwindow* window);
+
+	static bool IsKeyDown(Keys key);
+	static bool IsKeyUp(Keys key);
 };

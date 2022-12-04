@@ -2,7 +2,6 @@
 
 #include <string>
 #include <utility>
-#include "Input.h"
 
 struct GLFWwindow;
 
@@ -25,8 +24,6 @@ protected:
 	void SetWindowWidth(int width);
 	void SetWindowHeight(int height);
 	void SetWindowTitle(std::string_view title);
-
-	Input* Input = nullptr;
 
 	void Close();
 

@@ -156,7 +156,7 @@ bool App::InitializeCore()
 		return false;
 	}
 
-	Input = new ::Input(m_Data);
+	Input::SetWindow(m_Data);
 
 	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	DWORD dwMode = 0;
@@ -180,7 +180,6 @@ bool App::InitializeCore()
 }
 void App::CleanupCore()
 {
-	delete Input;
 	glfwDestroyWindow(m_Data);
 	glfwTerminate();
 }

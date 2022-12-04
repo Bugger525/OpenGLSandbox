@@ -2,15 +2,17 @@
 
 #include <GLFW/glfw3.h>
 
-Input::Input(GLFWwindow* window)
+GLFWwindow* Data = nullptr;
+
+void Input::SetWindow(GLFWwindow* window)
 {
-	m_Data = window;
+	Data = window;
 }
 bool Input::IsKeyDown(Keys key)
 {
-	return (glfwGetKey(m_Data, static_cast<int>(key)) == GLFW_PRESS);
+	return (glfwGetKey(Data, static_cast<int>(key)) == GLFW_PRESS);
 }
 bool Input::IsKeyUp(Keys key)
 {
-	return (glfwGetKey(m_Data, static_cast<int>(key)) == GLFW_RELEASE);
+	return (glfwGetKey(Data, static_cast<int>(key)) == GLFW_RELEASE);
 }

@@ -1,5 +1,6 @@
 #include "App.h"
 #include "Debug.h"
+#include "Input.h"
 
 class MyApp : public App
 {
@@ -17,7 +18,7 @@ protected:
 	}
 	void Update() override
 	{
-		if (Input->IsKeyDown(Keys::Escape))
+		if (Input::IsKeyDown(Keys::Escape))
 		{
 			Close();
 		}
