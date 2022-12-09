@@ -1,5 +1,7 @@
 #pragma once
 
+#include <map>
+
 struct GLFWwindow;
 
 enum class Keys : int
@@ -76,13 +78,21 @@ enum class Keys : int
 	RightBracket = 93,
 };
 
+struct KeyState
+{
+	bool Current = false;
+	bool Previous = false;
+};
+
 class Input
 {
 public:
-	Input() = delete;
+	Input(GLFWwindow* window);
 
-	static void SetWindow(GLFWwindow* window);
-
-	static bool IsKeyDown(Keys key);
-	static bool IsKeyUp(Keys key);
+	bool IsKeyHeld(Keys key) const;
+	bool IsKeyPressed(Keys key) const;
+	bool IsKeyReleased(Keys key) const;
+private:
+	std::map<int, KeyState> m_Keys;
+	static void KeyCallback(GLFWwindow* window, int key, int scanCode, int action, int mode);
 };

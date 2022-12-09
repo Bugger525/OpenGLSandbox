@@ -128,16 +128,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="App.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="OpenGLSandbox.cpp" />
+    <ClCompile Include="RenderWindow.cpp" />
     <ClCompile Include="Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="App.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="RenderWindow.h" />
     <ClInclude Include="Shader.h" />
   </ItemGroup>
   <ItemGroup>
