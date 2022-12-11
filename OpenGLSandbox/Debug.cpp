@@ -1,5 +1,4 @@
 #include "Debug.h"
-#include <format>
 #include <iostream>
 
 void Debug::Critical(std::string_view str, const std::source_location& location)
@@ -32,9 +31,9 @@ void Debug::Warn(std::string_view str, const std::source_location& location)
 		location.function_name())
 		<< std::endl;
 }
-void Debug::Log(std::string_view str, const std::source_location& location)
+void Debug::Info(std::string_view str, const std::source_location& location)
 {
-	std::cout << std::format("[\x1b[94mLOG\x1b[0m] {}\nAt {}({}:{}) `{}`\n",
+	std::cout << std::format("[\x1b[94mINFO\x1b[0m] {}\nAt {}({}:{}) `{}`\n",
 		str,
 		location.file_name(),
 		location.line(),

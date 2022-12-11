@@ -8,10 +8,8 @@ struct GLFWwindow;
 class RenderWindow
 {
 public:
-	RenderWindow();
 	RenderWindow(int width, int height, std::string_view title);
-
-	void Run();
+	~RenderWindow();
 
 	int GetWidth() const;
 	int GetHeight() const;
@@ -25,8 +23,8 @@ public:
 
 	void Close();
 	bool IsOpen() const;
-
 	void UpdateFrame();
+	void Cleanup();
 
 	Input* Input = nullptr;
 private:
@@ -34,4 +32,6 @@ private:
 	std::string m_Title = "RenderWindow";
 
 	GLFWwindow* m_Data = nullptr;
+
+	bool m_Cleanup = false;
 };

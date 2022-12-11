@@ -27,14 +27,13 @@ void APIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id, GLenum 
 
 	switch (severity)
 	{
-	case GL_DEBUG_SEVERITY_HIGH:         Debug::Critical(std::format("({}) {}", id, message)); break;
-	case GL_DEBUG_SEVERITY_MEDIUM:       Debug::Error(std::format("({}) {}", id, message));    break;
-	case GL_DEBUG_SEVERITY_LOW:          Debug::Warn(std::format("({}) {}", id, message));     break;
-	case GL_DEBUG_SEVERITY_NOTIFICATION: Debug::Log(std::format("({}) {}", id, message));      break;
+	case GL_DEBUG_SEVERITY_HIGH:         DEBUG_CRITICAL("({}) {}", id, message); break;
+	case GL_DEBUG_SEVERITY_MEDIUM:       DEBUG_ERROR("({}) {}", id, message);    break;
+	case GL_DEBUG_SEVERITY_LOW:          DEBUG_WARN("({}) {}", id, message);     break;
+	case GL_DEBUG_SEVERITY_NOTIFICATION: DEBUG_INFO("({}) {}", id, message);      break;
 	}
 }
 
-RenderWindow::RenderWindow() { }
 RenderWindow::RenderWindow(int width, int height, std::string_view title) : m_Width(width), m_Height(height), m_Title(title)
 {
 	if (!glfwInit())
@@ -77,10 +76,9 @@ RenderWindow::RenderWindow(int width, int height, std::string_view title) : m_Wi
 		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
 	}
 }
-void RenderWindow::Run()
+RenderWindow::~RenderWindow()
 {
-	glfwDestroyWindow(m_Data);
-	glfwTerminate();
+	Cleanup();
 }
 int RenderWindow::GetWidth() const
 {
@@ -131,4 +129,19 @@ void RenderWindow::UpdateFrame()
 {
 	glfwSwapBuffers(m_Data);
 	glfwPollEvents();
+}
+void RenderWindow::Cleanup()
+{
+	if (m_Cleanup) return;
+
+	glfwDestroyWindow(m_Data);
+	delete m_Data;
+	m_Data = nullptr;
+
+	delete Input;
+	Input = nullptr;
+
+	glfwTerminate();
+
+	m_Cleanup = true;
 }
