@@ -10,17 +10,41 @@ Input::Input(GLFWwindow* window)
 bool Input::IsKeyHeld(Keys key) const
 {
 	int code = static_cast<int>(key);
-	return m_Keys.at(code).Current && m_Keys.at(code).Previous;
+
+	auto it = m_Keys.find(code);
+	if (it != m_Keys.end())
+	{
+		auto& state = m_Keys.at(code);
+		return state.Current && state.Previous;
+	}
+	else
+		return false;
 }
 bool Input::IsKeyPressed(Keys key) const
 {
 	int code = static_cast<int>(key);
-	return m_Keys.at(code).Current && !m_Keys.at(code).Previous;
+
+	auto it = m_Keys.find(code);
+	if (it != m_Keys.end())
+	{
+		auto& state = m_Keys.at(code);
+		return state.Current && !state.Previous;
+	}
+	else
+		return false;
 }
 bool Input::IsKeyReleased(Keys key) const
 {
 	int code = static_cast<int>(key);
-	return !m_Keys.at(code).Current && m_Keys.at(code).Previous;
+
+	auto it = m_Keys.find(code);
+	if (it != m_Keys.end())
+	{
+		auto& state = m_Keys.at(code);
+		return !state.Current && state.Previous;
+	}
+	else
+		return false;
 }
 void Input::KeyCallback(GLFWwindow* window, int key, int scanCode, int action, int mode)
 {

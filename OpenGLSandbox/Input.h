@@ -93,6 +93,6 @@ public:
 	bool IsKeyPressed(Keys key) const;
 	bool IsKeyReleased(Keys key) const;
 private:
-	std::map<int, KeyState> m_Keys;
+	std::map<int, KeyState> m_Keys{};
 	static void KeyCallback(GLFWwindow* window, int key, int scanCode, int action, int mode);
 };

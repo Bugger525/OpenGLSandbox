@@ -26,12 +26,13 @@ public:
 	void UpdateFrame();
 	void Cleanup();
 
-	Input* Input = nullptr;
+	const Input* KeyboardInput() const;
 private:
 	int m_Width = 800, m_Height = 600;
 	std::string m_Title = "RenderWindow";
 
 	GLFWwindow* m_Data = nullptr;
+	Input* m_KeyboardInput = nullptr;
 
 	bool m_Cleanup = false;
 };

@@ -58,7 +58,7 @@ RenderWindow::RenderWindow(int width, int height, std::string_view title) : m_Wi
 		return;
 	}
 
-	Input = new ::Input(m_Data);
+	m_KeyboardInput = new Input(m_Data);
 
 	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	DWORD dwMode = 0;
@@ -134,14 +134,15 @@ void RenderWindow::Cleanup()
 {
 	if (m_Cleanup) return;
 
+	delete m_KeyboardInput;
+	m_KeyboardInput = nullptr;
+
 	glfwDestroyWindow(m_Data);
-	delete m_Data;
-	m_Data = nullptr;
-
-	delete Input;
-	Input = nullptr;
-
 	glfwTerminate();
 
 	m_Cleanup = true;
+}
+const Input* RenderWindow::KeyboardInput() const
+{
+	return m_KeyboardInput;
 }
